@@ -21,8 +21,8 @@ while True:
     upper_red = np.array([10, 255, 255])
      
     # define range of green color in HSV
-    lower_green = np.array([40, 20, 50])
-    upper_green = np.array([90, 255, 255])
+    lower_green = np.array([25, 52, 72])
+    upper_green = np.array([102, 255, 255])
      
     # define range of blue color in HSV
     lower_blue = np.array([100, 50, 50])
@@ -66,6 +66,12 @@ while True:
             cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
             cv2.putText(img, 'Blue', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 0, 0), 2)
   
+  
+  
+  
+  
+  
+    
     cv2.imshow('SHV color Output', img)
      
     # Close video window by pressing 'x'
