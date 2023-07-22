@@ -2,7 +2,7 @@ import cv2
 import numpy as np
  
 # Below function will read video imgs
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
  
  
 
@@ -49,6 +49,8 @@ while True:
             x, y, w, h = cv2.boundingRect(cnt)
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
             cv2.putText(img, 'Red', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
+            cv2.putText(img, "x: " + str(x) + " " + "y: "+ str(y) , (x+60, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+            cv2.putText(img, "w: " + str(w) + " " + "h: "+ str(h) , (x+60, y+15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
  
     # loop through the green contours and draw a rectangle around them
     for cnt in contours_green:
@@ -57,6 +59,8 @@ while True:
             x, y, w, h = cv2.boundingRect(cnt)
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(img, 'Green', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+            cv2.putText(img, "x: " + str(x) + " " + "y: "+ str(y) , (x+90, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(img, "w: " + str(w) + " " + "h: "+ str(h) , (x+90, y+15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
  
     # loop through the blue contours and draw a rectangle around them
     for cnt in contours_blue:
@@ -65,6 +69,8 @@ while True:
             x, y, w, h = cv2.boundingRect(cnt)
             cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
             cv2.putText(img, 'Blue', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 0, 0), 2)
+            cv2.putText(img, "x: " + str(x) + " " + "y: "+ str(y) , (x+60, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+            cv2.putText(img, "w: " + str(w) + " " + "h: "+ str(h) , (x+60, y+15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
   
   
   

@@ -17,16 +17,16 @@ while True:
     rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
  
     # define range of red color in rgb
-    upper_red = np.array([128, 64, 64])
-    lower_red = np.array([255, 42, 0])
+    lower_red = np.array([200, 0, 0])
+    upper_red = np.array([255, 190, 190])
      
     # define range of green color in rgb
-    upper_green = np.array([25, 52, 72])
-    lower_green = np.array([77, 255, 0])
+    lower_green = np.array([0, 190, 0])
+    upper_green = np.array([190, 255, 190])
      
     # define range of blue color in rgb
-    upper_blue = np.array([85, 128, 64])
-    lower_blue = np.array([0, 255, 42])
+    lower_blue = np.array([0, 0, 190])
+    upper_blue = np.array([190, 190, 255])
  
     # create a mask for red color
     mask_red = cv2.inRange(rgb, lower_red, upper_red)

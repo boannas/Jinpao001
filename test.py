@@ -7,21 +7,18 @@ while True:
     # Capture frame-by-frame
     ret, image = cap.read()
 
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     # define the list of boundaries
-    boundaries = [
-	([0,50,50], [10, 255, 255])
-    ]
+    boundaries = [([0,0,80], [80, 80, 255]) ]
 
     # loop over the boundaries
     for (lower, upper) in boundaries:
         # create NumPy arrays from the boundaries
-        lower = np.array(lower)
-        upper = np.array(upper)
+        lower = np.array(lower, dtype="uint8")
+        upper = np.array(upper, dtype="uint8")
 
         # find the colors within the specified boundaries and apply
         # the mask
-        mask = cv2.inRange(hsv, lower, upper)
+        mask = cv2.inRange(image, lower, upper)
         output = cv2.bitwise_and(image, image, mask=mask)
 
         imageOut = np.hstack([image, output])

@@ -5,25 +5,25 @@ def detect_green_objects(image):
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     pixel_size_min = 60
     pixel_size_max = 100
-    lower_orange = np.array([11, 50, 50])
-    upper_orange = np.array([25, 255, 255])
+    lower_green = np.array([40, 50, 50])
+    upper_green = np.array([80, 255, 255])
     lower_red = np.array([0, 50, 50])
     upper_red = np.array([10, 255, 255])
     lower_blue = np.array([100, 50, 50])
     upper_blue = np.array([130, 255, 255])
     
-    mask_orange = cv2.inRange(hsv, lower_orange, upper_orange)
+    mask_green = cv2.inRange(hsv, lower_green, upper_green)
     mask_red = cv2.inRange(hsv, lower_red, upper_red)
     mask_blue = cv2.inRange(hsv, lower_blue, upper_blue)
     
-    contours_orange, _ = cv2.findContours(mask_orange, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours_green, _ = cv2.findContours(mask_green, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     contours_red, _ = cv2.findContours(mask_red, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     contours_blue, _ = cv2.findContours(mask_blue, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    for contour in contours_orange:
+    for contour in contours_green:
         x, y, w, h = cv2.boundingRect(contour)
         if pixel_size_max > w > pixel_size_min and pixel_size_max > h > pixel_size_min: 
-            cv2.rectangle(image, (x, y), (x+w, y+h), (0, 140, 255), 2)
+            cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
     for contour in contours_red:
         x, y, w, h = cv2.boundingRect(contour)
         if pixel_size_max > w > pixel_size_min and pixel_size_max > h > pixel_size_min: 
@@ -35,7 +35,7 @@ def detect_green_objects(image):
     return image
 
 def show_webcam(mirror=False):
-    cam = cv2.VideoCapture(0)
+    cam = cv2.VideoCapture(1)
     
     while True:
         ret_val, img = cam.read()
