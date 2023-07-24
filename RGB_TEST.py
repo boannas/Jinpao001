@@ -2,7 +2,7 @@ import cv2
 import numpy as np
  
 # Below function will read video imgs
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
  
  
 
@@ -21,11 +21,11 @@ while True:
     upper_red = np.array([255, 190, 190])
      
     # define range of green color in rgb
-    lower_green = np.array([0, 190, 0])
-    upper_green = np.array([190, 255, 190])
+    lower_green = np.array([70, 155, 70])
+    upper_green = np.array([170, 255, 170])
      
     # define range of blue color in rgb
-    lower_blue = np.array([0, 0, 190])
+    lower_blue = np.array([0, 0, 160])
     upper_blue = np.array([190, 190, 255])
  
     # create a mask for red color
