@@ -3,13 +3,16 @@ import numpy as np
  
 # Below function will read video imgs
 cap = cv2.VideoCapture(1)
-known_length = 80
+known_length = 25
 focal_length = 80
 distance = 0 
 
 def find_Distance(pixel_lenght) :
     distance = (known_length * focal_length) / pixel_lenght
     return distance//1
+def find_focal_length(pixel_length):
+    focal_length = (pixel_length * distance)/known_length
+    # print(focal_length)
 
 def auto_tint_correction(image):
     # Split the image into individual color channels
@@ -81,13 +84,18 @@ while True:
         contour_area = cv2.contourArea(cnt)
         if contour_area > 1000:
             x, y, w, h = cv2.boundingRect(cnt)
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 0), 2)
+            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
             # cv2.circle(img,((x+2)/2,(y+h)/2),3,(255,0,0))
             # cv2.putText(img, 'Red', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
             # cv2.putText(img, "x: " + str(x) + " " + "y: "+ str(y) , (x+60, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
             # cv2.putText(img, "w: " + str(w) + " " + "h: "+ str(h) , (x+60, y+15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
             cv2.circle(img,(x+int(w)//2 ,y+int(h)//2 ),2,(0,0,0),3)  
-            # cv2.putText(img, str(find_Distance(w)), (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)                           #find distance of known object size
+            # cv2.putText(img, str(find_Distance(w)), (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255,255,255), 2)                           #find distance of known object size
+            if (w/h < 1.5):
+               cv2.putText(img, "Box", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
+            else :
+                cv2.putText(img, "Color Strip", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2)   
+            
  
     # loop through the green contours and draw a rectangle around them
     for cnt in contours_green:
@@ -99,6 +107,11 @@ while True:
             # cv2.putText(img, "x: " + str(x) + " " + "y: "+ str(y) , (x+90, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
             # cv2.putText(img, "w: " + str(w) + " " + "h: "+ str(h) , (x+90, y+15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
             cv2.circle(img,(x+int(w)//2 ,y+int(h)//2 ),2,(0,0,0),3)  
+            # cv2.putText(img, str(find_Distance(w)), (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255,255,255), 2) 
+            if (w/h < 1.5):
+               cv2.putText(img, "Box", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
+            else :
+                cv2.putText(img, "Color Strip", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2)  
  
     # loop through the blue contours and draw a rectangle around them
     for cnt in contours_blue:
@@ -110,12 +123,17 @@ while True:
             # cv2.putText(img, "x: " + str(x) + " " + "y: "+ str(y) , (x+60, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
             # cv2.putText(img, "w: " + str(w) + " " + "h: "+ str(h) , (x+60, y+15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
             cv2.circle(img,(x+int(w)//2 ,y+int(h)//2 ),2,(0,0,0),3)  
+            # cv2.putText(img, str(find_Distance(w)), (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255,255,255), 2) 
+            if (w/h < 1.5):
+               cv2.putText(img, "Box", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
+            else :
+                cv2.putText(img, "Color Strip", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2)  
   
   
   
   
   
-  
+    # find_focal_length(360)
     cv2.imshow('correction',auto_tint_correction(img))
     # cv2.imshow('Greeny',img)
     cv2.imshow('HSV color Output', img)
