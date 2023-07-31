@@ -3,17 +3,17 @@ import numpy as np
  
 # Below function will read video imgs
 cap = cv2.VideoCapture(1)
-known_length = 25
-focal_length = 80
+known_length = 3
+focal_length = 700
 distance = 0 
+list = [0]
 
 def find_Distance(pixel_lenght) :
     distance = (known_length * focal_length) / pixel_lenght
-    return distance//1
+    return round(distance,2)
 def find_focal_length(pixel_length):
     focal_length = (pixel_length * distance)/known_length
     # print(focal_length)
-
 def auto_tint_correction(image):
     # Split the image into individual color channels
     b, g, r = cv2.split(image)
@@ -47,11 +47,11 @@ def auto_tint_correction(image):
 while True:
     read_ok, img = cap.read()
     img_bcp = img.copy()
+    # img = cv2.resize(img,(1920,1080))
   
-    # img = cv2.resize(img, (640, 480))                   # 640*480 px
     # Make a copy to draw contour outline
     input_image_cpy = img.copy()
-    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    hsv = cv2.cvtColor(auto_tint_correction(img), cv2.COLOR_BGR2HSV)
  
     # define range of red color in HSV
     lower_red = np.array([0, 50, 50])
@@ -59,7 +59,7 @@ while True:
      
     # define range of green color in HSV
     lower_green = np.array([25, 52, 72]) 
-    upper_green = np.array([102, 255, 255])
+    upper_green = np.array([80, 255, 255])
      
     # define range of blue color in HSV
     lower_blue = np.array([100, 50, 50])
@@ -90,9 +90,12 @@ while True:
             # cv2.putText(img, "x: " + str(x) + " " + "y: "+ str(y) , (x+60, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
             # cv2.putText(img, "w: " + str(w) + " " + "h: "+ str(h) , (x+60, y+15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
             cv2.circle(img,(x+int(w)//2 ,y+int(h)//2 ),2,(0,0,0),3)  
-            # cv2.putText(img, str(find_Distance(w)), (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255,255,255), 2)                           #find distance of known object size
+                                     #find distance of known object size
             if (w/h < 1.5):
+               d = find_Distance(w)
+               list.append(d)
                cv2.putText(img, "Box", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
+               cv2.putText(img, str(d) + "mm", (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)  
             else :
                 cv2.putText(img, "Color Strip", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2)   
             
@@ -107,9 +110,12 @@ while True:
             # cv2.putText(img, "x: " + str(x) + " " + "y: "+ str(y) , (x+90, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
             # cv2.putText(img, "w: " + str(w) + " " + "h: "+ str(h) , (x+90, y+15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
             cv2.circle(img,(x+int(w)//2 ,y+int(h)//2 ),2,(0,0,0),3)  
-            # cv2.putText(img, str(find_Distance(w)), (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255,255,255), 2) 
+            
             if (w/h < 1.5):
+               d = find_Distance(w)
+               list.append(d)
                cv2.putText(img, "Box", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
+               cv2.putText(img, str(d)+"mm", (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2) 
             else :
                 cv2.putText(img, "Color Strip", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2)  
  
@@ -123,18 +129,24 @@ while True:
             # cv2.putText(img, "x: " + str(x) + " " + "y: "+ str(y) , (x+60, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
             # cv2.putText(img, "w: " + str(w) + " " + "h: "+ str(h) , (x+60, y+15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
             cv2.circle(img,(x+int(w)//2 ,y+int(h)//2 ),2,(0,0,0),3)  
-            # cv2.putText(img, str(find_Distance(w)), (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255,255,255), 2) 
+            
             if (w/h < 1.5):
+               d = find_Distance(w)
+               list.append(d)
                cv2.putText(img, "Box", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
+               cv2.putText(img, str(d)+"mm", (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2) 
             else :
                 cv2.putText(img, "Color Strip", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2)  
+    if len(list) > 100 :
+        list = [0]
+    else :
+        avg = sum(list)/len(list)
+
+    
   
-  
-  
-  
-  
+    cv2.putText(img, "Average Distance " + str(round(avg,2)), (420,340 ), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2)  
     # find_focal_length(360)
-    cv2.imshow('correction',auto_tint_correction(img))
+    # cv2.imshow('correction',auto_tint_correction(img))
     # cv2.imshow('Greeny',img)
     cv2.imshow('HSV color Output', img)
      
