@@ -1,7 +1,8 @@
 import cv2
 import numpy as np
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)
 cap2 = cv2.VideoCapture(1)
+# cap2 = cv2.VideoCapture(2)
 
 def auto_tint_correction(image):
     # Split the image into individual color channels
@@ -36,13 +37,15 @@ def auto_tint_correction(image):
 while cap.isOpened():
     ret, frame = cap.read()
     ret2,frame2 = cap2.read()
+    ret3, frame3 = cap.read()
 
 
     # cv2.imshow('My Com cam', frame)
-    cv2.imshow('correction',auto_tint_correction(frame2))
+    cv2.imshow('came',frame)
     
-    cv2.imshow('Webcam Logi', frame2)
-
+    cv2.imshow('Webcam 2', frame2)
+    cv2.imshow('auto tint ', auto_tint_correction(frame))
+    cv2.imshow('Webcam 3', frame3)
     if cv2.waitKey(1) == ord('q'):
         break
     

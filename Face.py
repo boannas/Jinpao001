@@ -20,15 +20,15 @@ while True:
         w, _ = detector.findDistance(pointLeft, pointRight)
         W = 6.3
 
-        # # Finding the Focal Length
-        # d = 50
-        # f = (w*d)/W
-        # print(f)
+        # Finding the Focal Length
+        d = 50
+        f = (w*d)/W
+        print(f)
 
         # Finding distance
-        f = 700
-        d = (W * f) / w
-        print(d)
+        # f = 700
+        # d = (W * f) / w
+        # print(d)
 
         cvzone.putTextRect(img, f'Depth: {int(d)}cm',
                            (face[10][0] - 100, face[10][1] - 50),
