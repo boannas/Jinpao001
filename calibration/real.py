@@ -1,17 +1,16 @@
-import pyrealsense2 as rs
-import numpy as np
-import cv2
 import my_Function as ff
+import pyrealsense2 as rs
+import cv2
+import numpy as np
 # Configure depth and color streams
 pipeline = rs.pipeline()
 config = rs.config()
-config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)                 # Resolution : 1280*720 , framerate 30 fps
+config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)                
 config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 30)
-
-distance = 0
 # Start streaming
 pipeline.start(config)
-
+tick_count = cv2.getTickCount()
+frame_count = 0
 try:
     while True:
         # Wait for a coherent pair of frames: depth and color
@@ -24,7 +23,16 @@ try:
         depth_frame = aligned_frames.get_depth_frame()
         color_frame = aligned_frames.get_color_frame()
         
+        frame_count += 1
         
+        if frame_count >= 20:  # Update FPS every 30 frames
+            tick_count_new = cv2.getTickCount()
+            time_spent = (tick_count_new - tick_count) / cv2.getTickFrequency()
+            fps = frame_count / time_spent
+            print("FPS: {:.2f}".format(fps),end='\r')
+            frame_count = 0
+            tick_count = cv2.getTickCount()
+            
         if not depth_frame or not color_frame:
             continue
         
@@ -93,7 +101,7 @@ try:
                     # cv2.putText(color_image, "Color Strip", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2) 
                     pass
             
- 
+
         # loop through the green contours and draw a rectangle around them
         for cnt in contours_green:
             contour_area = cv2.contourArea(cnt)

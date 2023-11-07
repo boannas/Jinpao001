@@ -1,4 +1,5 @@
 import numpy as np
+import pyrealsense2 as rs
 known_length = 130
 known_height = 120
 focal_length = 650
