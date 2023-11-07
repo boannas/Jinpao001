@@ -26,16 +26,6 @@ config.enable_stream(rs.stream.gyro)
 profile = pipeline.start(config)
 start_time = time.time()
 
-x=[]
-y=[]
-y2=[]
-index = count()
-def hahah(i):
-    
-    plt.plot(x,y)
-    plt.plot(x,y2)
-    plt.cla()
-
 
 
 try:
@@ -44,9 +34,6 @@ try:
     while True:
         # Wait for a coherent pair of frames: depth and color
         frames = pipeline.wait_for_frames()
-        ani = FuncAnimation(plt.gcf(),hahah)
-        plt.show()   
-        
         # Get gyro frame
         gyro_frame = frames.first_or_default(rs.stream.gyro)
 
@@ -72,9 +59,6 @@ try:
             c_y = -1.74/60 + 0.07/60
             print("Roll: {:.2f}, Pitch: {:.2f}, Yaw: {:.2f}".format(np.degrees(roll) - (c_r*elapsed_time),np.degrees(pitch) - (c_p*elapsed_time),np.degrees(yaw) - (c_y*elapsed_time)))
             # print("Roll",gyro_data.x)
-            y.append(roll)
-            y2.append(pitch)
-            x.append(elapsed_time)
          
 finally:
     # Stop streaming

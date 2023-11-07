@@ -8,9 +8,6 @@ config = rs.config()
 config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)                 # Resolution : 1280*720 , framerate 30 fps
 config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 30)
 
-
-known_length = 130
-focal_length = 650
 distance = 0
 # Start streaming
 pipeline.start(config)
@@ -40,7 +37,7 @@ try:
         lower_green = np.array([65, 60, 40]) 
         upper_green = np.array([75, 255, 255])
         
-        lower_red = np.array([0, 70, 60])
+        lower_red = np.array([0, 80, 55])
         upper_red = np.array([10, 255, 255])
         
         lower_blue = np.array([100, 70, 75])
@@ -70,7 +67,7 @@ try:
         # Show detected color with RGB 
         cv2.imshow("contour_gree",mask_green)
         cv2.imshow("contour_blue",mask_blue)
-        cv2.imshow("contour_red",mask_red)
+        cv2.imshow("contour_red",cv2.medianBlur((mask_red),9))
         
         cv2.circle(color_image,(color_res[0]//2,color_res[1]//2),2,(0,0,255),5)         # Create a Origin circle
         for cnt in contours_red:
@@ -80,7 +77,7 @@ try:
                 cv2.rectangle(color_image, (x, y), (x + w, y + h), (0, 0, 255), 2)
                 cv2.circle(color_image,(x+int(w)//2 ,y+int(h)//2 ),2,(255,255,255),3)  
                 cv2.circle(depth_colormap,(x+int(w)//2 ,y+int(h)//2 ),2,(255,255,255),3)  
-                if (w/h < 1.2) & (h/w < 1.2):
+                if (w/h < 1.5) & (h/w < 1.5):
                     pos = ff.find_pos(color_image,w,x+int(w)//2 ,y+int(h)//2)
                     cv2.putText(color_image, "Box", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
                     # cv2.putText(color_image, "w: " + str(w) + " mm", (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1)  
@@ -93,7 +90,8 @@ try:
                     cv2.putText(color_image, "x: " + str(round(pos[0],2)) + " mm ", (x, y+45), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                     cv2.putText(color_image, "y: " + str(round(pos[1],2)) + " mm ", (x, y+70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                 else :
-                    cv2.putText(color_image, "Color Strip", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2) 
+                    # cv2.putText(color_image, "Color Strip", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2) 
+                    pass
             
  
         # loop through the green contours and draw a rectangle around them
@@ -104,7 +102,7 @@ try:
                 cv2.rectangle(color_image, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 cv2.circle(color_image,(x+int(w)//2 ,y+int(h)//2 ),2,(255,255,255),3)  
                 cv2.circle(depth_colormap,(x+int(w)//2 ,y+int(h)//2 ),2,(255,255,255),3)  
-                if (w/h < 1.2) & (h/w < 1.2):
+                if (w/h < 1.5) & (h/w < 1.5):
                     pos = ff.find_pos(color_image,w,x+int(w)//2 ,y+int(h)//2)
                     cv2.putText(color_image, "Box", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
                     # cv2.putText(color_image, "d: " + str(w) + " mm", (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1)  
@@ -118,17 +116,18 @@ try:
                     cv2.putText(color_image, "x: " + str(round(pos[0],2)) + " mm ", (x, y+45), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                     cv2.putText(color_image, "y: " + str(round(pos[1],2)) + " mm ", (x, y+70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                 else :
-                    cv2.putText(color_image, "Color Strip", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2) 
+                    # cv2.putText(color_image, "Color Strip", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2) 
+                    pass
         # loop through the blue contours and draw a rectangle around them
         for cnt in contours_blue:
             contour_area = cv2.contourArea(cnt)
             if contour_area > 2000:
                 x, y, w, h = cv2.boundingRect(cnt)
                 cv2.rectangle(color_image, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                cv2.polylines(color_image,[cnt],True,(255,255,255),3)
+                # cv2.polylines(color_image,[cnt],True,(255,255,255),3)
                 cv2.circle(color_image,(x+int(w)//2 ,y+int(h)//2 ),2,(255,255,255),3)  
                 cv2.circle(depth_colormap,(x+int(w)//2 ,y+int(h)//2 ),2,(255,255,255),3)  
-                if (w/h < 1.2) & (h/w < 1.2):
+                if (w/h < 1.5) & (h/w < 1.5):
                     pos = ff.find_pos(color_image,w,x+int(w)//2 ,y+int(h)//2)
                     cv2.putText(color_image, "Box", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
                     # cv2.putText(color_image, "d: " + str(w) + " mm", (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1)  
@@ -137,12 +136,12 @@ try:
                     # cv2.putText(color_image, "W: " + str(w) + " mm", (x, y+15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1)
                     cv2.line(color_image,(x+int(w)//2 -80,y+int(h)//2),(x+int(w)//2+80 ,y+int(h)//2),(255,255,255),2)
                     cv2.line(color_image,(x+int(w)//2,y+int(h)//2-80),(x+int(w)//2 ,y+int(h)//2+80),(255,255,255),2)
-                    # cv2.putText(color_image, "d_Sensor: " + str(depth_value) + " mm", (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1) 
-                    # cv2.putText(color_image, "x: " + str(round(pos[0],2)) + " mm ", (x, y+45), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-                    # cv2.putText(color_image, "y: " + str(round(pos[1],2)) + " mm ", (x, y+70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+                    cv2.putText(color_image, "d_Sensor: " + str(depth_value) + " mm", (x, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1) 
+                    cv2.putText(color_image, "x: " + str(round(pos[0],2)) + " mm ", (x, y+45), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+                    cv2.putText(color_image, "y: " + str(round(pos[1],2)) + " mm ", (x, y+70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                 else :
-                    cv2.putText(color_image, "Color Strip", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2) 
-            
+                    # cv2.putText(color_image, "Color Strip", (x, y+10), cv2.FONT_HERSHEY_SIMPLEX,0.5, (255,255,255), 2) 
+                    pass
             # Create center in depth screen to reference        
             cv2.circle(depth_colormap,(depth_res[0]//2, depth_res[1]//2),2,(255,255,255),3) 
     
